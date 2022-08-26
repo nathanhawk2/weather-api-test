@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var appid = 'a83cd16f45a517250a52f83592bb80be';
+    var q = 'Chicago';
+
+    var geoURL = `http://api.openweathermap.org/geo/1.0/direct?q=${q}&appid=${appid}`;
+
+    fetch(geoURL)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (locations) {
+        var city = locations[0];
+        console.log('LAT', city.lat);
+        console.log('LON', city.lon);
+
+        var oneCall = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&appid=${appid}&units=imperial`;
+
+        fetch(oneCall)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            console.log(data);
+          });
+      });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
