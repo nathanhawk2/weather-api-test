@@ -1,41 +1,66 @@
 var appid = '692efab00ae66e9f48137e6ea4766fcd';
-var q = 'Chicago';
+var q = document.querySelector('#q');
 
-var geoURL = `http://api.openweathermap.org/geo/1.0/direct?q=${q}&appid=${appid}`;
-fetch(geoURL)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (locations) {
-        var city = locations[0];
-        console.log('LAT', city.lat);
-        console.log('LON', city.lon);
+var searchEL = document.querySelector('#search');
+searchEL.addEventListener('click', searchWeather);
 
-        var oneCall = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&appid=${appid}&units=imperial`;
+function searchWeather(event) {
+    event.preventDefault();
+    var geoURL = `http://api.openweathermap.org/geo/1.0/direct?q=${q.value}&appid=${appid}`;
+    fetch(geoURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (locations) {
+            var city = locations[0];
+            console.log('LAT', city.lat);
+            console.log('LON', city.lon);
 
-        fetch(oneCall)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log(data);
-            });
-    });
+            var oneCall = `https://api.openweathermap.org/data/3.0/onecall?lat=${city.lat}&lon=${city.lon}&appid=${appid}&units=imperial`;
 
-var displayButtons = function () {
-    var cities = JSON.parse(localStorage.getItem('cities')) || [];
-    for (var city of cities) {
-        var buttonEl = document.createElement('button');
-        buttonEl.textContent = city;
-        buttonEl.className = "btn btn-success mb-3";
-        searchForm.appendChild(buttonEl);
+            fetch(oneCall)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data)
+                    displayButton();
+                });
+
+        });
+
+}
+
+var displayButton = function () {
+    var searchHistory = []
+    var pastSearch = JSON.parse(localStorage.getItem('search-terms'))
+    if (pastSearch) {
+        searchHistory = pastSearch
     }
+    searchHistory.push(value)
+
+    localStorage.setItem('search-terms', JSON.stringify(searchHistory))
+    var buttonEl = document.createElement('button');
+    buttonEl.textContent = q.value;
+    buttonEl.className = "btn btn-success mb-3";
+    document.querySelector('#searchedCities').appendChild(buttonEl);
 };
 
+var recButtons = function () {
+    var pastSearch = JSON.parse(localStorage.getItem('search-terms'))
+    for (i = 0; i < pastSearch.length; i++) {
+        var buttonEl = document.createElement('button');
+        buttonEl.textContent = pastSearch[i];
+        buttonEl.className = "btn btn-success mb-3";
+        document.querySelector('#searchedCities').appendChild(buttonEl);
+    }
+}
+recButtons();
 
-var saveToLocalStorage = function (city) {
-    var cities = JSON.parse(localStorage.getItem('cities')) || [];
-    cities.push(city);
-    var data = JSON.stringify(cities);
-    localStorage.setItem('cities', data);
-};
+// add event listener to this button to search based off the text of the button
+// refactor search weather function 
+
+var weatherButtons = function () {
+    for (i = 1; i < current.daily - 2; i++)
+        console.log(current.daily[i])
+}
