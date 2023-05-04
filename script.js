@@ -12,7 +12,7 @@ function Search(specific_cityname='') {
     if (city_name == '') {
         city_name = document.getElementById('searchCity').value
     }
-    var geoURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city_name}&appid=${appid}`;
+    var geoURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city_name}&appid=${appid}`;
     
     var toJSon = function(response) {
         return response.json();
@@ -110,4 +110,4 @@ function CurrentDay(data) {
     $('.current-wind').html('Wind: ' + data.current.wind_speed + ' mph');
     $('.current-humidity').html('Humidity: ' + data.current.humidity + '%');
     $('.current-uv-index').html('UV Index: ' + data.current.uvi);
-}
+};
